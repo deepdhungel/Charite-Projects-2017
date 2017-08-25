@@ -1,3 +1,6 @@
+#Analysis of Statin , Numbers Needed to Treat, Odds Ratio , Risk Reduction , Absolute Risk Reduction 
+
+
 import pandas as pd
 import scipy.stats as stats
 import numpy as np
