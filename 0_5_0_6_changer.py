@@ -1,3 +1,6 @@
+
+#changes the values in the column of a dataframe
+
 import pandas as pd
 
 df = pd.read_csv('file:///C:/Users/Onotation/Documents/Internship/out.CSV')
