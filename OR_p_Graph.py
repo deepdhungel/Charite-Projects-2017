@@ -1,3 +1,8 @@
+#odds ratio / p value calculation for analysis
+
+
+
+
 #from __future__ import division
 #import numpy as np
 import scipy.stats as stats
