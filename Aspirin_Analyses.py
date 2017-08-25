@@ -1,3 +1,5 @@
+#oddsratio, absolute risk reduction , number needed to treat, risk ratio etc out of statin cancer data
+
 import pandas as pd
 import scipy.stats as stats
 #import numpy as np
