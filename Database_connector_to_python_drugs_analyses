@@ -1,0 +1,35 @@
+import MySQLdb
+import collections 
+from collections import Counter 
+import matplotlib.pyplot as plt; plt.rcdefaults() 
+import matplotlib.pyplot as plt 
+import pandas as pd 
+import numpy as np
+
+def connect_to_database():         
+    mydb = MySQLdb.connect(host = "textmining",user="deep",passwd = "***")        
+    return mydb
+
+def dosomething(db):         
+    cursor = db.cursor()
+ query  = ("""select clozapine.atc_id_TO_cocktailID.who_id, cocktail_id ,clozapine.atc_drugs_2016.who_name from     clozapine.atc_id_TO_cocktailID join clozapine.atc_drugs_2016 on clozapine.atc_id_TO_cocktailID.who_id = clozapine.atc_drugs_2016.who_id""")
+                
+
+    cursor.execute(query)        
+    rows = cursor.fetchall()
+        CountinmyDi = {}
+           CountinmyDi = Counter(row[2] for row in rows)
+           for who_id , count in CountinmyDi.most_common(12):                
+                  print (who_id,":",count,100 * float(count)/float(771))
+
+        df=pd.DataFrame({'pantoprazole':215,'levodopa':179,'acetylsalicylic acid':107,'ramipril':83,'levothyroxine sodium'82,'metoprolol':70,'simvastatin':60,'rivastigmine':57,'amisulpride':54,'pregabalin':52,'citalopram': 52},index = ['|'])
+                ax = df.plot(kind='bar',stacked = False, colormap = 'Paired') 
+                for p in ax.patches:                 
+                           ax.annotate(np.round(p.get_height(),decimals=0), (p.get_x()+p.get_width()/2., p.get_height()), ha='center',    va='center', xytext=(2, 10), textcoords='offset points')        
+                plt.ylabel('Number of co-occurrences ')         
+                plt.title('Commonly Used Drugs Along With Clozapine')         
+                plt.show()
+
+if __name__ == "__main__":         
+db = connect_to_database ()         
+dosomething(db)
