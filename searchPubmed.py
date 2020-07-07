@@ -1,3 +1,4 @@
+#this is basically a script to search the pubmed by "string"
 from StringIO import StringIO
 from Bio import Entrez, Medline
 

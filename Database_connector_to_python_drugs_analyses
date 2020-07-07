@@ -1,3 +1,4 @@
+#import libraries 
 import MySQLdb
 import collections 
 from collections import Counter 
@@ -6,22 +7,24 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import numpy as np
 
+#define a function to connect to the database 
 def connect_to_database():         
     mydb = MySQLdb.connect(host = "textmining",user="deep",passwd = "***")        
     return mydb
 
+#connect to the db and import from the db respective columns as df in pandas 
 def dosomething(db):         
     cursor = db.cursor()
  query  = ("""select clozapine.atc_id_TO_cocktailID.who_id, cocktail_id ,clozapine.atc_drugs_2016.who_name from     clozapine.atc_id_TO_cocktailID join clozapine.atc_drugs_2016 on clozapine.atc_id_TO_cocktailID.who_id = clozapine.atc_drugs_2016.who_id""")
                 
-
+#count the 12 most  common drugs 
     cursor.execute(query)        
     rows = cursor.fetchall()
         CountinmyDi = {}
            CountinmyDi = Counter(row[2] for row in rows)
            for who_id , count in CountinmyDi.most_common(12):                
                   print (who_id,":",count,100 * float(count)/float(771))
-
+#plot the frequency distribution 
         df=pd.DataFrame({'pantoprazole':215,'levodopa':179,'acetylsalicylic acid':107,'ramipril':83,'levothyroxine sodium'82,'metoprolol':70,'simvastatin':60,'rivastigmine':57,'amisulpride':54,'pregabalin':52,'citalopram': 52},index = ['|'])
                 ax = df.plot(kind='bar',stacked = False, colormap = 'Paired') 
                 for p in ax.patches:                 
@@ -29,7 +32,7 @@ def dosomething(db):
                 plt.ylabel('Number of co-occurrences ')         
                 plt.title('Commonly Used Drugs Along With Clozapine')         
                 plt.show()
-
+#close connection
 if __name__ == "__main__":         
 db = connect_to_database ()         
 dosomething(db)

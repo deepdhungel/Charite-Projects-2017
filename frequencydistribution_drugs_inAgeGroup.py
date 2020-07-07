@@ -1,19 +1,21 @@
+#import the libraries 
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import pylab
 plt.style.use('fivethirtyeight')
 
-
+#read the csv as df 
 df = pd.read_csv('C:\Users\OnoTation\Desktop\AllCsvs\cocktail_ids_age_gender.csv')
 df.values
-
+#Return the indices of the bins to which each value in input array belongs
 bins = np.arange(1, 10) * 10
 df['category'] = np.digitize(df.Age, bins, right=True)
 
-
+#group the dataframes by category and gender and calculate frequency distribution by age 
 counts = df.groupby(['category', 'Gender']).Age.count().unstack()
 
+#plot 
 ax = counts.plot(kind='bar',stacked = True, colormap = 'Paired',rot = 45)
 
 for p in ax.patches:

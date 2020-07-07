@@ -1,15 +1,16 @@
 #Analysis of Statin , Numbers Needed to Treat, Odds Ratio , Risk Reduction , Absolute Risk Reduction 
 
-
+#import the libraries
 import pandas as pd
 import scipy.stats as stats
 import numpy as np
 import matplotlib.pyplot as plt
 
+#use the plot style and precision according to charite template 
 plt.style.use('fivethirtyeight')
 pd.set_option('precision', 0)
 
-
+#read the excel to dfs 
 doc = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/AllMalignantCancer/allMalignantCancer_newDB.xls')
 J_1 = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/tables/J-1.xlsx')
 I_1 = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/tables/I-1.xlsx')
@@ -22,7 +23,7 @@ I = doc.loc[:,'Cocktails-w/o-Cancer-w-Statins']
 H = doc.loc[:,'Cocktails-w/o-Cancer/Statins']
 D = doc.loc[:,'Cocktails-w-Statins-and-Cancer']
 
-
+#merge the dfs by frequency of drugs and age groups 
 JJ1 = J_1.merge(J.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
 II1 = I_1.merge(I.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
 HH1 = H_1.merge(H.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
@@ -36,6 +37,7 @@ frames_concat = pd.concat(frames)
 #df = pd.read_csv('file:///C:/Users/Onotation/Documents/Internship/out.CSV')
 #df.values
 
+#edit the format with the regular expressions 
 frames_concat.AgeGroups = \
              frames_concat.AgeGroups.replace([r'^(\d{1})\_', r'_(\d{1})$'], 
                                   [r'0\1_',r'_0\1'],
@@ -48,12 +50,12 @@ counts = grp.unstack(level=[2])
 
 counts1=grp.unstack(level=[1])
 
-
+#calculate the odds ratio
 table = counts1.groupby(level="Cancer").sum().values
 oddsratio, pvalue = stats.fisher_exact(table)
 print("OddsR(w-statin/wo-statin): ", oddsratio, "p-Value for confidence interval 95%:", pvalue)
 
-
+#plot test 
 #counts1['sumwwoStatin']= counts1['w-statin']+counts1['wo-statin']
 
 #counts1['oddRatio']=((counts1['w-statin']/counts1['sumwwoStatin'])/(counts1['wo-statin']/counts1['sumwwoStatin']))
@@ -79,12 +81,12 @@ counts['sumwwoCancer']= counts['No']+counts['Yes']
 test= counts['cumInci']=((counts['Yes']/counts['sumwwoCancer'])*100)
 
 testUnstacked = test.unstack(level=[1])
-
+#calculate the risk ration 
 ok=testUnstacked['AbsoluteRR']= (testUnstacked['wo-statin']-testUnstacked['w-statin'])
 
 trialokay = ok.mean()
 
-
+#calculate numbers needed to treat 
 NumNeedTreat = 1/trialokay
 pot = np.ceil(NumNeedTreat)
 pot1 = str(int(float(pot)))

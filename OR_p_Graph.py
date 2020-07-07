@@ -1,8 +1,5 @@
 #odds ratio / p value calculation for analysis
 
-
-
-
 #from __future__ import division
 #import numpy as np
 import scipy.stats as stats
@@ -16,13 +13,14 @@ import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 
 
-
+#read dataframe
 df = pd.read_csv('file:///C:/Users/Onotation/Desktop/allMalignantCancerRange_newDB.csv')
 df.values
 
-
+#group unique ages 
 ages= df.AgeGroups.unique()
 
+#group dfs by agegroup, factor, cancertypes 
 grp = df.groupby(['AgeGroups','Factor','Cancer']).Frequency.sum()
 
 counts = grp.unstack(level=[2])
@@ -31,8 +29,7 @@ counts = grp.unstack(level=[2])
 
 counts1=grp.unstack(level=[1])
 
-
-
+#calculate the odds ratio and p-value 
 table = counts1.groupby(level="Cancer").sum().values
 oddsratio, pvalue = stats.fisher_exact(table)
 print("OddsR(w-statin/wo-statin): ", oddsratio, "p-Value:", pvalue)
@@ -50,7 +47,7 @@ by_factor = counts.groupby(level='Factor')
 
 k = by_factor.ngroups
 
-
+#plot 
 fig, axes = plt.subplots(1, k, sharex=True, sharey=True, figsize=(15, 8))
 for i, (gname, grp) in enumerate(by_factor):
     grp.xs(gname, level='Factor').plot.bar(

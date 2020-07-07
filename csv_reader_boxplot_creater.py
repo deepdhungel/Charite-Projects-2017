@@ -3,15 +3,15 @@
 
 import matplotlib.pyplot as plt
 import pandas as pd
-
+#charite colored plot
 plt.style.use('fivethirtyeight')
 
-
+#read the csv of drugs cocktails by gender csv 
 df = pd.read_csv('C:\Users\OnoTation\Desktop\AllCsvs\cocktail_ids_age_gender.csv')
 df.values
-
+#group the df by age group and count the cocktail ids 
 grouped = df.groupby(['Age']).Cocktail_ID.count()
-
+#generate box plot 
 fig, ax = plt.subplots()
 boxprops = dict(linestyle='-', linewidth=5, color='k')
 medianprops = dict(linestyle='-', linewidth=5, color='blue')

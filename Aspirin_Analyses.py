@@ -1,13 +1,13 @@
 #oddsratio, absolute risk reduction , number needed to treat, risk ratio etc out of statin cancer data
-
+#import libraries
 import pandas as pd
 import scipy.stats as stats
 #import numpy as np
 import matplotlib.pyplot as plt
-
+#modify plot style in charite colors 
 plt.style.use('fivethirtyeight')
 
-
+#read excel from the colorectal carcinoma data as dataframes
 doc = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/Colorectal_ALL/C10AA/Malignant_Colorectal_Carcinom_5.xls')
 J_1 = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/tables/J-1.xlsx')
 I_1 = pd.read_excel('file:///C:/Users/Onotation/Documents/Internship/tables/I-1.xlsx')
@@ -20,7 +20,7 @@ I = doc.loc[:,'Cocktails-w/o-Cancer-w-Statins']
 H = doc.loc[:,'Cocktails-w/o-Cancer/Statins']
 D = doc.loc[:,'Cocktails-w-Statins-and-Cancer']
 
-
+#join the dataframes on agegroups
 JJ1 = J_1.merge(J.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
 II1 = I_1.merge(I.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
 HH1 = H_1.merge(H.to_frame('Frequency'),left_on = 'AgeGroups', right_index=True, how ='left')
@@ -33,7 +33,7 @@ frames_concat = pd.concat(frames)
 
 #df = pd.read_csv('file:///C:/Users/Onotation/Documents/Internship/out.CSV')
 #df.values
-
+#using regular expression clean the data
 frames_concat.AgeGroups = \
              frames_concat.AgeGroups.replace([r'^(\d{1})\_', r'_(\d{1})$'], 
                                   [r'0\1_',r'_0\1'],
@@ -65,7 +65,7 @@ by_factor = counts.groupby(level='Factor')
 
 k = by_factor.ngroups
 
-
+#plot the data 
 fig, axes = plt.subplots(1, k, sharex=True, sharey=True, figsize=(15, 8))
 for i, (gname, grp) in enumerate(by_factor):
     grp.xs(gname, level='Factor').plot.bar(
