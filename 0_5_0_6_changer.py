@@ -2,7 +2,8 @@
 #changes the values in the column of a dataframe
 
 import pandas as pd
-
+#reads the data from the csv and using regular regular expression changes the values in their right format in df
+#this is part of data cleaning procedure
 df = pd.read_csv('file:///C:/Users/Onotation/Documents/Internship/out.CSV')
 df.values
 
